@@ -10,6 +10,7 @@ const spotify = new Spotify(keys.spotify);
 
 let command = process.argv[2];
 let term = process.argv.slice(3).join(" ");
+let data = "";
 
 function runCommand(command) {
   switch (command) {
@@ -26,8 +27,8 @@ function runCommand(command) {
       break;
   
     case "do-what-it-says":
-      fs.readFile("./random.txt", "utf8", (err, data) => {
-        if (err) throw err;
+      fs.readFile("random.txt", "utf8", (err, data) => {
+        if (err) console.log(error);
 
         command = data.split(" ")[0];
         term = data.split(" ").slice(1).join("+");
@@ -37,7 +38,7 @@ function runCommand(command) {
       break;
   
     default:
-      console.log("Invalid command");
+      return console.log("Invalid command");
   }
 }
 
@@ -53,7 +54,6 @@ function concertThis(band) {
 
   axios.get(URL)
     .then(function (response) {
-      let data = "";
 
       response = response.data;
       response.forEach(concert => {
@@ -69,6 +69,10 @@ function concertThis(band) {
       });
 
       console.log(data);
+
+      fs.appendFile("log.txt", data, err => {
+        if (err) throw err;
+      })
     })
     .catch(function (error) {
       console.log(error);
@@ -89,7 +93,6 @@ function spotifyThis(song) {
     }
 
     let artists = [];
-    let data = "";
 
     response = response.tracks.items[0];
     response.artists.forEach(artist => artists.push(artist.name));
@@ -103,6 +106,10 @@ function spotifyThis(song) {
     ].join("\n\n");
 
     console.log(data);
+
+    fs.appendFile("log.txt", data, err => {
+      if (err) throw err;
+    })
   });
 }
 
@@ -118,7 +125,6 @@ function movieThis(movie) {
 
   axios.get(URL)
     .then(function (response) {
-      let data = "";
 
       response = response.data;
 
@@ -135,6 +141,10 @@ function movieThis(movie) {
       ].join("\n\n");
 
       console.log(data);
+
+      fs.appendFile("log.txt", data, err => {
+        if (err) throw err;
+      })
     })
     .catch(function (error) {
       console.log(error);
