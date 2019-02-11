@@ -27,14 +27,7 @@ function runCommand(command) {
       break;
   
     case "do-what-it-says":
-      fs.readFile("random.txt", "utf8", (err, data) => {
-        if (err) console.log(error);
-
-        command = data.split(" ")[0];
-        term = data.split(" ").slice(1).join("+");
-        
-        runCommand(command);
-      })
+      doThis();
       break;
   
     default:
@@ -149,6 +142,17 @@ function movieThis(movie) {
     .catch(function (error) {
       console.log(error);
     });
+}
+
+function doThis() {
+  fs.readFile("do-this.txt", "utf8", (err, data) => {
+    if (err) console.log(error);
+
+    command = data.split(" ")[0];
+    term = data.split(" ").slice(1).join("+");
+    
+    runCommand(command);
+  })
 }
 
 runCommand(command);
